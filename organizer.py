@@ -17,7 +17,7 @@ import csv
 import pandas as pd 
 
 # -------------------------------
-# Logging Setup - FIXED WITH TIMESTAMP
+# Logging Setup 
 # -------------------------------
 os.makedirs("logs", exist_ok=True)
 log_file = f"logs/organizer_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
@@ -67,7 +67,7 @@ def get_year_month_folder(file_path, base_folder):
     timestamp = os.path.getmtime(file_path)
     file_date = datetime.fromtimestamp(timestamp)
     year = str(file_date.year)
-    month_folder = MONTHS[file_date.month - 1]  # Month number + name
+    month_folder = MONTHS[file_date.month - 1]  
 
     category = get_file_category(file_path)
     folder_path = os.path.join(base_folder, category, year, month_folder)
@@ -118,9 +118,9 @@ def save_report_csv(filename="file_report.xlsx"):
     if not os.path.exists(reports_folder):
         os.makedirs(reports_folder)
 
-    df = pd.DataFrame(file_report)  # Convert list of dicts to DataFrame
+    df = pd.DataFrame(file_report) 
 
-    # Optional: sort for readability
+    # sort for readability
     df = df.sort_values(by=["Category", "Year", "Month", "File Name"])
 
     # Save as Excel with proper table format - FIXED: save in reports folder
@@ -137,23 +137,22 @@ def organize_files(source_folder, dry_run=False):
 
     files_moved = False
     
-    # FIXED: USE os.walk() INSTEAD OF os.listdir() FOR RECURSIVE SEARCH
+    # RECURSIVE SEARCH
     for root, dirs, files in os.walk(source_folder):
         for filename in files:
             file_path = os.path.join(root, filename)
             
-            # Skip if it's not a regular file (e.g., symlinks, directories)
+          
             if not os.path.isfile(file_path):
                 continue
                 
-            # Skip files that are already in organized folders (avoid re-organizing)
             if root != source_folder and any(part in FILE_TYPES.keys() for part in root.split(os.sep)):
                 continue
                 
             move_file(file_path, source_folder, dry_run=dry_run)
             files_moved = True
             
-    save_report_csv()  # FIXED: No base_folder parameter needed now
+    save_report_csv()  
     
     if files_moved:
         print("File organization complete!")
@@ -193,4 +192,5 @@ if __name__ == "__main__":
         reset_folder(args.source_folder)
     else:
         organize_files(args.source_folder, dry_run=args.dry_run)
+
 
