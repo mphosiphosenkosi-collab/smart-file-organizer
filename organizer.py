@@ -1,6 +1,6 @@
 """
 SMART FILE ORGANIZER
-Copyright (c) 2024 J. Siphosenkosi Sibiya
+Copyright (c) 2025 J. Siphosenkosi Sibiya-Project_T
 
 This software is licensed under the MIT License.
 See LICENSE file for details.
@@ -119,11 +119,8 @@ def save_report_csv(filename="file_report.xlsx"):
         os.makedirs(reports_folder)
 
     df = pd.DataFrame(file_report) 
-
-    # sort for readability
     df = df.sort_values(by=["Category", "Year", "Month", "File Name"])
 
-    # Save as Excel with proper table format - FIXED: save in reports folder
     file_path = os.path.join(reports_folder, filename)
     df.to_excel(file_path, index=False)
     print(f"Structured report saved: {file_path}")
@@ -192,5 +189,6 @@ if __name__ == "__main__":
         reset_folder(args.source_folder)
     else:
         organize_files(args.source_folder, dry_run=args.dry_run)
+
 
 
